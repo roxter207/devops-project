@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build and run docker image') {
+            steps {
+                sh 'docker stop stage-container || true && docker rm main-container || true'
+                sh 'sudo docker pull snehakaimal27/pythonwebsite:latest'
+                sh 'sudo docker run --name stage-container -d -p 8082:80 snehakaimal27/pythonwebsite:latest'
+            } 
+        }
+        stage('testing') {
+            steps {
+                sh 'curl -I 192.168.200.131:8082'
+            }
+        }
+    }
+}
